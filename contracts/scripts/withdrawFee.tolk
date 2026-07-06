@@ -19,7 +19,7 @@ fun main(poolAddress: address) {
     val before = scripts.fetchAccountBalance(poolAddress);
     println("Pool balance before: {:ton}", before);
 
-    val res = pool.sendWithdrawFee(owner.address, { value: ton("0.05") });
+    val res = pool.sendWithdrawFee(owner.address, { value: ton("0.05"), bounce: true });
     println(res.waitForTrace());
 
     println("Pool balance after: {:ton}", scripts.fetchAccountBalance(poolAddress));

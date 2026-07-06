@@ -15,7 +15,8 @@ fun main(poolAddress: address, outcome: int, amountTon: int) {
     }
 
     val value = (amountTon * 1000000000) as coins;
-    val res = pool.sendBet(bettor.address, outcome as uint8, { value });
+    // bounce: true — if the contract rejects the bet, the coins return to the sender
+    val res = pool.sendBet(bettor.address, outcome as uint8, { value, bounce: true });
     println(res.waitForTrace());
     println("Bet outcome={} amount={} TON placed on {}", outcome, amountTon, poolAddress);
 }

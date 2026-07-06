@@ -15,7 +15,7 @@ fun main(poolAddress: address) {
     }
 
     println("Claimable for {}: {} nanoton", claimer.address, pool.getPayout(claimer.address));
-    val res = pool.sendClaim(claimer.address, { value: ton("0.1") });
+    val res = pool.sendClaim(claimer.address, { value: ton("0.1"), bounce: true });
     println(res.waitForTrace());
     println("Claim sent to {}", poolAddress);
 }

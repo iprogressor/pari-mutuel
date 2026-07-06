@@ -108,10 +108,13 @@ acton check                  # linter gate
 acton script contracts/scripts/deployPool.tolk
 acton script contracts/scripts/deployPool.tolk --net testnet
 
-# Interact (pass the address printed by deployPool); outcome 1=YES, 2=NO
-acton script contracts/scripts/bet.tolk     <pool-address> 1 2 --net testnet
-acton script contracts/scripts/resolve.tolk <pool-address> 1   --net testnet
-acton script contracts/scripts/claim.tolk   <pool-address>     --net testnet
+# Interact (pass the address printed by deployPool); outcome 1=YES, 2=NO.
+# Note: acton flags go BEFORE the script path — everything after it becomes main() args.
+acton script --net testnet contracts/scripts/bet.tolk     <pool-address> 1 2
+acton script --net testnet contracts/scripts/resolve.tolk <pool-address> 1
+acton script --net testnet contracts/scripts/claim.tolk   <pool-address>
+acton script --net testnet contracts/scripts/cancel.tolk  <pool-address>
+acton script --net testnet contracts/scripts/withdrawFee.tolk <pool-address>
 ```
 
 Copy `.env.example` to `.env` for Toncenter API keys before using `--net`.

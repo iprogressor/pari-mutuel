@@ -16,7 +16,7 @@ fun main(poolAddress: address) {
         return;
     }
 
-    val res = pool.sendCancel(sender.address, { value: ton("0.05") });
+    val res = pool.sendCancel(sender.address, { value: ton("0.05"), bounce: true });
     println(res.waitForTrace());
 
     val st = pool.getStatus();

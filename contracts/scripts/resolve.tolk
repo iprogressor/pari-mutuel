@@ -16,7 +16,11 @@ fun main(poolAddress: address, outcome: int) {
         return;
     }
 
-    val res = pool.sendResolve(owner.address, outcome as uint8, { value: ton("0.05") });
+    val res = pool.sendResolve(
+        owner.address,
+        outcome as uint8,
+        { value: ton("0.05"), bounce: true },
+    );
     println(res.waitForTrace());
 
     val st = pool.getStatus();
