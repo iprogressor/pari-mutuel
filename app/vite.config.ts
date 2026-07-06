@@ -16,6 +16,10 @@ export default defineConfig({
     alias: {
       '@wrappers': path.resolve(projectRoot, '../wrappers-ts'),
       '@': path.resolve(projectRoot, 'src'),
+      // The wrapper lives outside app/, so its `import '@ton/core'` would
+      // resolve up from the repo root (absent on CI, and a *second* copy
+      // locally). Pin every import to the app's single copy.
+      '@ton/core': path.resolve(projectRoot, 'node_modules/@ton/core'),
     },
   },
   build: {
