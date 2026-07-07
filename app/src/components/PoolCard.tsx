@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTonAddress } from '@tonconnect/ui-react';
+
+import { Button } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
 import type { Network } from '@/lib/router';
@@ -56,11 +59,21 @@ function Row({ label, value }: { label: string; value: string }) {
 export function PoolCard({
   network,
   address,
+  question,
 }: {
   network: Network;
   address: string;
+  question: string | null;
 }) {
   const wallet = useTonAddress();
+  const [copied, setCopied] = useState(false);
+
+  function copyInvite() {
+    void navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   const poolQuery = useQuery({
     queryKey: ['pool', network, address],
@@ -99,6 +112,10 @@ export function PoolCard({
           Check the address and the selected network (testnet pools need the
           testnet switch). {String(poolQuery.error ?? '')}
         </p>
+        <p className="text-muted-foreground text-[13px]">
+          Just created this pool? The deploy takes ~15 seconds — this page
+          retries automatically.
+        </p>
       </div>
     );
   }
@@ -114,10 +131,18 @@ export function PoolCard({
     <div className="max-w-md mx-auto w-full space-y-6">
       {/* status */}
       <div className="text-center space-y-1">
+        {question && (
+          <h1 className="text-[20px] font-semibold tracking-tight">
+            {question}
+          </h1>
+        )}
         <p className={cn('text-[17px] font-semibold', tone)}>{phaseLabel}</p>
         <p className="text-muted-foreground text-[12px] font-mono break-all">
           {address}
         </p>
+        <Button variant="outline" size="sm" onClick={copyInvite}>
+          {copied ? 'Copied!' : 'Copy invite link'}
+        </Button>
       </div>
 
       {/* pot split bar */}

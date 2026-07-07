@@ -132,8 +132,8 @@ export function PoolActions({
           </div>
           {lockedOutcome !== null && (
             <p className="text-[13px] text-muted-foreground">
-              You already bet on {lockedOutcome === OUTCOME_YES ? 'YES' : 'NO'}—
-              you can only add to the same side.
+              You already bet on {lockedOutcome === OUTCOME_YES ? 'YES' : 'NO'}{' '}
+              — you can only add to the same side.
             </p>
           )}
         </div>

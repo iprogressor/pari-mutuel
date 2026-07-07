@@ -156,7 +156,10 @@ fun onInternalMessage(in: InMessage) {
             // Empty body = deploy message or a plain top-up.
             assert (in.body.isEmpty()) throw PoolErrors.InvalidMessage;
             // Validate immutable config + seed at deploy (the deploy message runs this branch).
+            // Spec §8: now < bettingDeadline < resolutionDeadline. Side effect: plain
+            // top-ups are only accepted while betting is open (they bounce afterwards).
             val storage = lazy PoolStorage.load();
+            assert (blockchain.now() < storage.bettingDeadline) throw PoolErrors.BadConfig;
             assert (
                 storage.bettingDeadline < storage.resolutionDeadline
             ) throw PoolErrors.BadConfig;

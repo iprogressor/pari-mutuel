@@ -332,3 +332,14 @@ get fun `test rejects deploy with inverted deadlines`() {
         pool.deploy(owner.address, { value: ton("1") }),
     ).toHaveFailedTx({ from: owner.address, to: pool.address, exitCode: PoolErrors.BadConfig });
 }
+
+get fun `test rejects deploy with betting deadline in the past`() {
+    testing.setNow(BETTING_TIME);
+    val owner = testing.treasury("owner");
+    var st = freshStorage(owner.address, 500);
+    st.bettingDeadline = BETTING_TIME - 500; // already passed at deploy time
+    val pool = PredictionPool.fromStorage(st);
+    expect(
+        pool.deploy(owner.address, { value: ton("1") }),
+    ).toHaveFailedTx({ from: owner.address, to: pool.address, exitCode: PoolErrors.BadConfig });
+}

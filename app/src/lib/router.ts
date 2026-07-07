@@ -5,6 +5,7 @@ export type Network = 'mainnet' | 'testnet';
 interface Route {
   isTestnet: boolean;
   pool: string | null;
+  question: string | null;
 }
 
 function parseRoute(): Route {
@@ -12,13 +13,20 @@ function parseRoute(): Route {
   return {
     isTestnet: params.get('testnet') === 'true',
     pool: params.get('pool'),
+    question: params.get('q'),
   };
 }
 
-function buildUrl(testnet: boolean, pool: string | null) {
+function buildUrl(
+  testnet: boolean,
+  pool: string | null,
+  question: string | null,
+) {
   const params = new URLSearchParams();
   if (testnet) params.set('testnet', 'true');
   if (pool) params.set('pool', pool);
+  // the question lives only in the link (off-chain), so invites carry context
+  if (pool && question) params.set('q', question);
   const search = params.toString();
   // Relative to the current path so it works both at "/" (dev) and
   // under "/pari-mutuel/" (GitHub Pages).
@@ -48,14 +56,14 @@ export function useRouter() {
 
   const setTestnet = useCallback(
     (testnet: boolean) => {
-      push(buildUrl(testnet, route.pool));
+      push(buildUrl(testnet, route.pool, route.question));
     },
-    [route.pool],
+    [route.pool, route.question],
   );
 
   const setPool = useCallback(
-    (pool: string | null) => {
-      push(buildUrl(route.isTestnet, pool));
+    (pool: string | null, question: string | null = null) => {
+      push(buildUrl(route.isTestnet, pool, question));
     },
     [route.isTestnet],
   );
@@ -63,6 +71,7 @@ export function useRouter() {
   return {
     network: (route.isTestnet ? 'testnet' : 'mainnet') as Network,
     pool: route.pool,
+    question: route.question,
     setTestnet,
     setPool,
   };

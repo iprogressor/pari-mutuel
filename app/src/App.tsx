@@ -6,6 +6,7 @@ import { Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NetworkDropdown } from './components/NetworkDropdown';
 import { PoolCard } from './components/PoolCard';
+import { CreatePool } from './components/CreatePool';
 import { useRouter } from './lib/router';
 import { IconTonDiamond } from './components/TonDiamond';
 
@@ -69,7 +70,7 @@ function OpenPoolForm({ onOpen }: { onOpen: (address: string) => void }) {
 }
 
 export default function App() {
-  const { network, pool, setTestnet, setPool } = useRouter();
+  const { network, pool, question, setTestnet, setPool } = useRouter();
   const { theme, setTheme } = useTheme();
 
   return (
@@ -108,9 +109,19 @@ export default function App() {
       {/* ─── Main content ─── */}
       <main className="flex-1 py-8 px-6 max-w-[1200px] mx-auto w-full">
         {pool ? (
-          <PoolCard network={network} address={pool} />
+          <PoolCard network={network} address={pool} question={question} />
         ) : (
-          <OpenPoolForm onOpen={setPool} />
+          <div className="max-w-md mx-auto w-full">
+            <OpenPoolForm onOpen={setPool} />
+            <div className="flex items-center gap-3 my-2">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-muted-foreground text-[13px]">
+                or start your own
+              </span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+            <CreatePool network={network} onCreated={setPool} />
+          </div>
         )}
       </main>
     </div>
