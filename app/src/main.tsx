@@ -6,6 +6,13 @@ import { createRoot } from 'react-dom/client';
 import './styles.css';
 
 async function bootstrap() {
+  // Inside Telegram: acknowledge the Mini App handshake and go full height.
+  const tma = window.Telegram?.WebApp;
+  if (tma) {
+    tma.ready();
+    tma.expand();
+  }
+
   const [{ default: App }, { AppProviders }] = await Promise.all([
     import('./App'),
     import('./providers/AppProviders'),

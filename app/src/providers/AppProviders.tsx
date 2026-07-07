@@ -53,6 +53,11 @@ export function AppProviders({ children }: PropsWithChildren) {
     <QueryClientProvider client={queryClient}>
       <TonConnectUIProvider
         manifestUrl={manifestUrl}
+        // When running as a Telegram Mini App, the wallet needs to know where
+        // to send the user back after connecting/signing — our bot.
+        actionsConfiguration={{
+          twaReturnUrl: 'https://t.me/ton_pari_mutuell_bot',
+        }}
         uiPreferences={{
           theme: initialTheme,
           colorsSet: { [THEME.DARK]: darkColors, [THEME.LIGHT]: lightColors },
